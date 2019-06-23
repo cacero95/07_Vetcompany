@@ -1,0 +1,39 @@
+<ion-header>
+    <ion-toolbar class="navbar">
+        <ion-buttons slot="start">
+            <ion-button (click)="close()">
+                <ion-icon name="arrow-round-back"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <ion-title>Agrega Foto</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="fondo" padding>
+    <ion-row offset="1" size="10">
+        <ion-col>
+            <ion-item (click)="add_imagen()">
+                <img src="../../../../../assets/img/shalo_logo.png" alt="shalo">
+            </ion-item>
+        </ion-col>
+    </ion-row>
+
+    <ion-item style="--background:transparent; --color:#ffffff;">
+        <ion-label position=f loating>Nombre</ion-label>
+        <ion-input #name></ion-input>
+    </ion-item>
+
+    <ion-item style="--background:transparent; --color:#ffffff;">
+        <ion-label position=f loating>Raza</ion-label>
+        <ion-input #raza></ion-input>
+    </ion-item>
+    <ion-item style="--background:transparent; --color:#ffffff;">
+        <ion-label position=f loating>Edad</ion-label>
+        <ion-input type="number" #edad></ion-input>
+    </ion-item>
+    <ion-item style="--background:transparent; --color:#ffffff;">
+        <ion-button (click)="crear_mascota(name.value, raza.value, edad.value)" style="--background-activated : red; --padding-start:50px; --padding-end:50px; --border-radius:30px;" fill="outline" size="large">
+            <ion-icon name="paw"></ion-icon>
+        </ion-button>
+    </ion-item>
+</ion-content>

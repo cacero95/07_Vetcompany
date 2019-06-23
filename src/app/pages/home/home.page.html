@@ -1,0 +1,52 @@
+<ion-header>
+    <ion-toolbar class="navbar" mode="ios">
+        <ion-buttons slot="start">
+            <ion-menu-button color="light"></ion-menu-button>
+        </ion-buttons>
+        <ion-title style="--color:#ffffff;">Vetcompany</ion-title>
+    </ion-toolbar>
+    <ion-toolbar mode="ios">
+        <ion-tabs *ngIf="usuario">
+            <ion-tab-bar>
+                <ion-tab-button>
+                    <ion-icon name="locate"></ion-icon>
+                    <ion-label>Ubicar</ion-label>
+                </ion-tab-button>
+                <ion-tab-button>
+                    <ion-icon name="chatbubbles"></ion-icon>
+                    <ion-label>Mensajes</ion-label>
+                </ion-tab-button>
+            </ion-tab-bar>
+        </ion-tabs>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="background" *ngIf="usuario">
+
+    <ion-slides>
+        <ion-slide *ngFor="let mascota of usuario.mascotas">
+            <ion-card style="--color:#ffffff;">
+                <ion-card-header style="--background:#ffffff;">
+                    <ion-card-title color="dark">
+                        {{usuario.name}}
+                    </ion-card-title>
+                </ion-card-header>
+                <img [src]="mascota.url" [alt]="mascota.name">
+                <ion-card-content padding>
+                    <div style="background: #ffffff; color: #000000; border-radius: 10px;">
+                        <p>Nombre mascota: {{mascota.name}}</p>
+                        <p *ngIf="mascota.edad">Edad: {{mascota.edad}}</p>
+                        <p *ngIf="mascota.raza">Raza: {{mascota.raza}} </p>
+                    </div>
+                </ion-card-content>
+            </ion-card>
+        </ion-slide>
+    </ion-slides>
+</ion-content>
+
+<ion-content padding *ngIf="vet">
+    <ion-card>
+        <ion-card-header> {{vet.name}} </ion-card-header>
+        <img [src]="vet.imagen" [alt]="vet.name">
+    </ion-card>
+</ion-content>

@@ -1,0 +1,27 @@
+<ion-header>
+    <ion-toolbar class="navbar" mode="ios">
+        <ion-buttons slot="start">
+            <ion-button color="light" (click)="back()">
+                <ion-icon name="arrow-round-back"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <ion-title> {{nombre}} </ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content padding class="fondo">
+    <ion-card style="color:#ffffff;" *ngFor="let tweet of tweets">
+        <img [src]="imagen" [alt]="tweet.user.name">
+        <ion-card-header>
+            <ion-card-title style="color:#ffffff;"> {{nombre}} </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+            <h2> {{tweet.text}} </h2>
+            <div text-center>
+                <ion-button *ngIf="tweet.entities.urls.length > 0" (click)="ver_completo(tweet.entities.urls[0].expanded_url)" style="--background-activated : red; --padding-start:50px; --padding-end:50px; --border-radius:30px;" fill="outline" size="large">
+                    <ion-icon name="paw"></ion-icon>
+                </ion-button>
+            </div>
+        </ion-card-content>
+    </ion-card>
+</ion-content>
