@@ -13,9 +13,10 @@ const routes: Routes = [
   { path: 'notificaciones', loadChildren: './pages/home/notificaciones/notificaciones.module#NotificacionesPageModule' },
   { path: 'eventos', loadChildren: './pages/home/eventos/eventos.module#EventosPageModule' },
   { path: 'veterinarias', loadChildren: './pages/home/veterinarias/veterinarias.module#VeterinariasPageModule' },
-  { path: 'rastrear', loadChildren: './pages/home/rastrear/rastrear.module#RastrearPageModule' },
+  
   { path: 'account', loadChildren: './pages/home/account/account.module#AccountPageModule' },
-  { path: 'update', loadChildren: './pages/home/account/update/update.module#UpdatePageModule' },
+  { path: 'update', loadChildren: './pages/home/account/update/update.module#UpdatePageModule' },  { path: 'chat', loadChildren: './pages/home/chat/chat.module#ChatPageModule' }
+
   
   
 ];

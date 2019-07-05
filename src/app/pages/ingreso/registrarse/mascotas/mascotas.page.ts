@@ -42,7 +42,7 @@ export class MascotasPage implements OnInit {
     if(this.is_image){
       this.mascota.url = this.image64;
     }
-    this.mascota.name = name;
+    this.mascota.pet_name = name;
     this.mascota.raza = raza;
     this.mascota.edad = edad;
     console.log(this.mascota);

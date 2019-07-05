@@ -22,13 +22,15 @@ import { registerLocaleData } from '@angular/common';
 // plugins
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { ImagePicker } from '@ionic-native/image-picker/ngx';
-
+import { Geolocation } from '@ionic-native/geolocation/ngx';
 // entry components
 import { GruposPage } from './pages/information/grupos/grupos.page';
 
 import { MascotasPage } from './pages/ingreso/registrarse/mascotas/mascotas.page';
 import { TypeUserPage } from './pages/ingreso/type-user/type-user.page';
-
+import { IonicStorageModule } from '@ionic/storage';
+import { PopperComponent } from './pages/home/popper/popper.component';
+import { ConsejosPage } from './pages/information/consejos/consejos.page';
 
 
 export const firebaseConfig = {
@@ -42,19 +44,21 @@ export const firebaseConfig = {
 
 registerLocaleData(localeCO,'es',localeCOExtra);
 @NgModule({
-  declarations: [AppComponent,GruposPage,TypeUserPage,MascotasPage],
-  entryComponents: [GruposPage,TypeUserPage,MascotasPage],
+  declarations: [AppComponent,GruposPage,TypeUserPage,MascotasPage,PopperComponent,ConsejosPage],
+  entryComponents: [GruposPage,TypeUserPage,MascotasPage,PopperComponent,ConsejosPage],
   imports: [BrowserModule,
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFireDatabaseModule,
     HttpClientModule,
     AngularFireAuthModule,
     IonicModule.forRoot(),
+    IonicStorageModule.forRoot(),
     AppRoutingModule],
   providers: [
     StatusBar,
     SplashScreen,
     InAppBrowser,
+    Geolocation,
     ImagePicker,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],

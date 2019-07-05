@@ -5,48 +5,84 @@
         </ion-buttons>
         <ion-title style="--color:#ffffff;">Vetcompany</ion-title>
     </ion-toolbar>
-    <ion-toolbar mode="ios">
-        <ion-tabs *ngIf="usuario">
+
+    <ion-toolbar>
+        <ion-tabs>
             <ion-tab-bar>
-                <ion-tab-button>
+                <ion-tab-button (click)="navegar('eventos')">
+                    <ion-icon name="calendar"></ion-icon>
+                    <ion-label>Mensajes</ion-label>
+                </ion-tab-button>
+                <ion-tab-button (click)="navegar('rastreo')">
                     <ion-icon name="locate"></ion-icon>
                     <ion-label>Ubicar</ion-label>
                 </ion-tab-button>
-                <ion-tab-button>
-                    <ion-icon name="chatbubbles"></ion-icon>
-                    <ion-label>Mensajes</ion-label>
+                <ion-tab-button [ngClass]="{'border': chats}" (click)="chats=true">
+                    <ion-icon name="chatboxes"></ion-icon>
+                    <ion-label>Chats</ion-label>
                 </ion-tab-button>
             </ion-tab-bar>
         </ion-tabs>
     </ion-toolbar>
 </ion-header>
 
-<ion-content class="background" *ngIf="usuario">
-
-    <ion-slides>
-        <ion-slide *ngFor="let mascota of usuario.mascotas">
-            <ion-card style="--color:#ffffff;">
-                <ion-card-header style="--background:#ffffff;">
-                    <ion-card-title color="dark">
-                        {{usuario.name}}
-                    </ion-card-title>
-                </ion-card-header>
-                <img [src]="mascota.url" [alt]="mascota.name">
-                <ion-card-content padding>
-                    <div style="background: #ffffff; color: #000000; border-radius: 10px;">
-                        <p>Nombre mascota: {{mascota.name}}</p>
-                        <p *ngIf="mascota.edad">Edad: {{mascota.edad}}</p>
-                        <p *ngIf="mascota.raza">Raza: {{mascota.raza}} </p>
-                    </div>
-                </ion-card-content>
-            </ion-card>
-        </ion-slide>
-    </ion-slides>
-</ion-content>
-
-<ion-content padding *ngIf="vet">
-    <ion-card>
-        <ion-card-header> {{vet.name}} </ion-card-header>
-        <img [src]="vet.imagen" [alt]="vet.name">
+<ion-content padding class="background" *ngIf="usuario && !chats">
+    <ion-card style="--color:#ffffff;" *ngFor="let push of publicaciones">
+        <ion-card-header>
+            <ion-card-title text-center style="--color:#ffffff;"> {{push.origen}} </ion-card-title>
+            <br>
+            <img *ngIf="push.imagen" [src]="push.imagen" [alt]="push.imagen">
+        </ion-card-header>
+        <ion-card-content text-center>
+            <p> {{push.mensaje}}. </p>
+            <ion-row>
+                <ion-col size="10" offset="1">
+                    <ion-button style="--background-activated : red; --padding-start:50px; --padding-end:50px; --border-radius:30px;" fill="outline" expand="block">
+                        <ion-icon name="paw"></ion-icon>
+                    </ion-button>
+                </ion-col>
+            </ion-row>
+        </ion-card-content>
     </ion-card>
+</ion-content>
+<ion-content padding class="background" *ngIf="chats">
+    <ion-searchbar color="light" animated (ionChange)="buscar_usuarios($event)" placeholder="A quien buscas?"></ion-searchbar>
+    <ion-list inset="true" style="background-color: blue;" *ngIf="user.chats">
+        <ion-list-header>
+            Tus conversaciones
+        </ion-list-header>
+        <ion-item (click)="entrar_chat(chat)" *ngFor="let chat of user.chats">
+            <ion-avatar slot="start">
+                <img *ngIf="chat.user_pets" [src]="chat.user_pets.url">
+                <img *ngIf="chat.veterinarias" [src]="chat.veterinarias.url">
+            </ion-avatar>
+            <ion-label *ngIf="chat.user_pets">
+                <h2> {{chat.user_pets.name}} {{chat.user_pets.apellido}} </h2>
+                <p> {{chat.user_pets.type}} </p>
+            </ion-label>
+            <ion-label *ngIf="chat.veterinarias">
+                <h2> {{chat.veterinarias.name}}</h2>
+                <p> {{chat.veterinarias.type}} </p>
+            </ion-label>
+        </ion-item>
+    </ion-list>
+    <ion-list inset="true" style="background-color: blue;" *ngIf="!user.chats">
+        <ion-list-header>
+            Usuarios disponibles
+        </ion-list-header>
+        <ion-item (click)="entrar_chat(us)" style="--background:transparent;" *ngFor="let us of usuarios">
+            <ion-avatar slot="start">
+                <img *ngIf="us.url" [src]="us.url">
+            </ion-avatar>
+            <ion-label *ngIf="us.apellido">
+                <h2> {{us.name}} {{us.apellido}} </h2>
+                <p> {{us.type}} </p>
+            </ion-label>
+            <ion-label *ngIf="!us.apellido">
+                <h2> {{us.name}}</h2>
+                <p> {{us.type}} </p>
+            </ion-label>
+        </ion-item>
+    </ion-list>
+
 </ion-content>

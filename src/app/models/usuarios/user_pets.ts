@@ -1,6 +1,7 @@
 export interface User_pets {
     name:string;
     apellido?:string;
+    url:string;
     email:string;
     password?:string;
     direccion?:string;
@@ -10,9 +11,17 @@ export interface User_pets {
     Tasks?:Eventos[];
     type:string;
     veterinarias?:Veterinarias[];
+    chats?:Chats[];
+}
+export interface Chats {
+    
+    mensaje?:string[];
+    user_pets?:User_pets;
+    veterinarias?:Veterinarias;
+    
 }
 export interface Mascotas {
-    name:string;
+    pet_name:string;
     edad?:number;
     raza?:string;
     url?:string;
@@ -29,11 +38,12 @@ export interface Veterinarias {
     direccion?:string;
     telefono?:string;
     email:string;
-    imagen?:string;
+    url?:string;
     type:string;
     services?:string[];
     usuarios?:User_pets[];
     eventos?:Eventos[];
+    chats?:Chats[];
 }
 export interface Google_login{
     displayName:string;

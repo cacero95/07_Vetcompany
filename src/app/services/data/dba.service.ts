@@ -54,6 +54,16 @@ export class DbaService {
 
     })
   }
+  load_chat(){
+    
+    return this.fireDba.list(`usuarios`).snapshotChanges()
+    .pipe(map(usuarios=>{
+      return usuarios.map(user=>{
+        let data = user.payload.val();
+        return data;
+      })
+    }))
+  }
   setToken(token){
     this.token = token;
   }
@@ -65,7 +75,7 @@ export class DbaService {
           this.key = this.key.replace(".","_");
         }
     return new Promise((resolve,reject)=>{
-      this.fireDba.list(`${this.key}/`).snapshotChanges()
+      this.fireDba.list(`usuarios/${this.key}/`).snapshotChanges()
       .pipe(map(element=>{
         return element.map((value)=>{
           let key = value.key;
@@ -124,7 +134,7 @@ export class DbaService {
           }
         }
         
-        this.fireDba.object(`${this.key}/`).update(usuario).then(()=>{
+        this.fireDba.object(`usuarios/${this.key}/`).update(usuario).then(()=>{
           this.setUsuario(usuario);
           resolve(true);
         }).catch(()=>{
@@ -132,7 +142,7 @@ export class DbaService {
         })
       }
       else {
-        this.fireDba.object(`${this.key}/`).update(usuario).then(()=>{
+        this.fireDba.object(`usuarios/${this.key}/`).update(usuario).then(()=>{
           this.setUsuario(usuario);
           resolve(true);
         }).catch(()=>{
@@ -146,11 +156,11 @@ export class DbaService {
   registrar_vet(vet:Veterinarias){
     return new Promise ((resolve,reject)=>{
 
-      if (vet.imagen){
+      if (vet.url){
         let firestorage = firebase.storage().ref();
         let file_name = new Date().valueOf().toString();
         let fire_task: firebase.storage.UploadTask = firestorage.child(`/img/${file_name}`)
-        .putString(vet.imagen,'base64',{contentType:'image/jpeg'});
+        .putString(vet.url,'base64',{contentType:'image/jpeg'});
         fire_task.on(firebase.storage.TaskEvent.STATE_CHANGED,()=>{
   
         },
@@ -159,7 +169,7 @@ export class DbaService {
         },
         ()=>{
           firestorage.child(`/img/${file_name}`).getDownloadURL().then((url)=>{
-            vet.imagen = url;
+            vet.url = url;
           }).then(()=>{
             this.fireDba.object(`${this.key}/`).update(vet).then(()=>{
               this.setUsuario(vet);
@@ -195,5 +205,14 @@ export class DbaService {
     return this.usuario;
   }
 
+  rastreo(pet){
+    return this.fireDba.list(`rastreo/${pet}`).snapshotChanges()
+    .pipe(map(values=>{
+      return values.map((value=>{
+        let data = value.payload.val();
+        return data;
+      }))
+    }))
+  }
 
 }

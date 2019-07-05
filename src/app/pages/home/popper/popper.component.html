@@ -1,0 +1,5 @@
+<ion-list>
+    <ion-item (click)="select(mascota.pet_name)" *ngFor="let mascota of mascotas">
+        <ion-label> {{mascota.pet_name}} </ion-label>
+    </ion-item>
+</ion-list>

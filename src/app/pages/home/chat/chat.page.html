@@ -1,0 +1,21 @@
+<ion-header>
+    <ion-toolbar mode="ios">
+        <ion-buttons slot="start">
+            <ion-button (click)="back()">
+                <ion-icon name="arrow-round-back"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <ion-title> {{nombre}} </ion-title>
+        <ion-buttons slot="end">
+            <ion-button>
+                <ion-avatar>
+                    <img [src]="url" [alt]="nombre">
+                </ion-avatar>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+
+</ion-content>

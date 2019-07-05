@@ -6,6 +6,7 @@ import { DbaService } from 'src/app/services/data/dba.service';
 import { PetData } from 'src/app/models/pet_data/pet_data';
 import { ModalController } from '@ionic/angular';
 import { GruposPage } from '../grupos/grupos.page';
+import { ConsejosPage } from '../consejos/consejos.page';
 
 @Component({
   selector: 'app-enterate',
@@ -39,18 +40,24 @@ export class EnteratePage implements OnInit {
     
   }
   visitar(url){
-    
     this.iab.create(`${url[0].expanded_url}/`,"_blank");
   }
   datos_mascotas(){
     this.dba.datos_mascotas().subscribe((data:any)=>{
+      console.log(data);
       this.policial = data[0].policial;
       this.tips = data[1].tips;
       
     })
   }
-  ver_completo(consejo){
-    
+  async ver_completo(consejo){
+    let modal = await this.modal.create({
+      component:ConsejosPage,
+      componentProps:{
+        consejo 
+      }
+    });
+    modal.present();
   }
   async ver_tweets(name,imagen,nombre){
     let modal = await this.modal.create({

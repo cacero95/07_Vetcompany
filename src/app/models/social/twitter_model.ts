@@ -1,4 +1,8 @@
-
+export interface Publicaciones {
+    imagen:string;
+    mensaje:string;
+    origen:string;
+}
 export interface Body {
     cuerpo: Cuerpo;
 }

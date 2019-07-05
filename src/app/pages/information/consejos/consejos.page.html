@@ -1,0 +1,27 @@
+<ion-header>
+    <ion-toolbar class="navbar" mode="ios">
+        <ion-buttons>
+            <ion-button style="--color:#ffffff;" (click)="back()">
+                <ion-icon name="arrow-round-back"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <ion-title color="light">Información</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="fondo" padding>
+    <ion-card style="color: #ffffff;">
+        <ion-card-header>
+            <ion-card-title style="color: #ffffff;"> {{information.titulo}} </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+            {{information.descripcion}}
+            <ul *ngIf="information.tipos">
+                <li *ngFor="let types of information.tipos">
+                    <h2 *ngIf="types.titulo"> {{types.titulo}} </h2>
+                    <p>{{types.descripcion}}</p>
+                </li>
+            </ul>
+        </ion-card-content>
+    </ion-card>
+</ion-content>

@@ -1,7 +1,20 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>eventos</ion-title>
-  </ion-toolbar>
+    <ion-toolbar class="navbar" mode="ios">
+    </ion-toolbar>
+    <ion-toolbar>
+        <ion-tabs>
+            <ion-tab-bar>
+                <ion-tab-button (click)="navegar('rastreo')">
+                    <ion-icon name="locate"></ion-icon>
+                    <ion-label>Ubicar</ion-label>
+                </ion-tab-button>
+                <ion-tab-button (click)="navegar('home')">
+                    <ion-icon name="home"></ion-icon>
+                    <ion-label>Principal</ion-label>
+                </ion-tab-button>
+            </ion-tab-bar>
+        </ion-tabs>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content>

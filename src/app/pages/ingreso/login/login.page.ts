@@ -22,7 +22,7 @@ export class LoginPage implements OnInit {
     
   }
   login(email,password){
-    console.log(email,password);
+    
     this.auth.auth.signInWithEmailAndPassword(email,password)
     .then(()=>{
       let respuesta = this.dba.login(email);
