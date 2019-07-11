@@ -9,80 +9,58 @@
     <ion-toolbar>
         <ion-tabs>
             <ion-tab-bar>
-                <ion-tab-button (click)="navegar('eventos')">
-                    <ion-icon name="calendar"></ion-icon>
-                    <ion-label>Mensajes</ion-label>
+                <ion-tab-button [ngClass]="{'border': !chats}" (click)="change_option(false)">
+                    <ion-icon name="contacts"></ion-icon>
+                    <ion-label>Usuarios</ion-label>
+                </ion-tab-button>
+                <ion-tab-button *ngIf="is_chats" [ngClass]="{'border': chats}" (click)="change_option(true)">
+                    <ion-icon name="chatbubbles"></ion-icon>
+                    <ion-label>Chats</ion-label>
                 </ion-tab-button>
                 <ion-tab-button (click)="navegar('rastreo')">
                     <ion-icon name="locate"></ion-icon>
-                    <ion-label>Ubicar</ion-label>
-                </ion-tab-button>
-                <ion-tab-button [ngClass]="{'border': chats}" (click)="chats=true">
-                    <ion-icon name="chatboxes"></ion-icon>
-                    <ion-label>Chats</ion-label>
+                    <ion-label>Mascota</ion-label>
                 </ion-tab-button>
             </ion-tab-bar>
         </ion-tabs>
     </ion-toolbar>
 </ion-header>
 
-<ion-content padding class="background" *ngIf="usuario && !chats">
-    <ion-card style="--color:#ffffff;" *ngFor="let push of publicaciones">
-        <ion-card-header>
-            <ion-card-title text-center style="--color:#ffffff;"> {{push.origen}} </ion-card-title>
-            <br>
-            <img *ngIf="push.imagen" [src]="push.imagen" [alt]="push.imagen">
-        </ion-card-header>
-        <ion-card-content text-center>
-            <p> {{push.mensaje}}. </p>
-            <ion-row>
-                <ion-col size="10" offset="1">
-                    <ion-button style="--background-activated : red; --padding-start:50px; --padding-end:50px; --border-radius:30px;" fill="outline" expand="block">
-                        <ion-icon name="paw"></ion-icon>
-                    </ion-button>
-                </ion-col>
-            </ion-row>
-        </ion-card-content>
-    </ion-card>
-</ion-content>
-<ion-content padding class="background" *ngIf="chats">
-    <ion-searchbar color="light" animated (ionChange)="buscar_usuarios($event)" placeholder="A quien buscas?"></ion-searchbar>
-    <ion-list inset="true" style="background-color: blue;" *ngIf="user.chats">
-        <ion-list-header>
+<ion-content *ngIf="chats" class="background" padding>
+    <ion-list inset="true" style="background-color:transparent;">
+        <ion-list-header style="--color:#ffffff;">
             Tus conversaciones
         </ion-list-header>
-        <ion-item (click)="entrar_chat(chat)" *ngFor="let chat of user.chats">
-            <ion-avatar slot="start">
-                <img *ngIf="chat.user_pets" [src]="chat.user_pets.url">
-                <img *ngIf="chat.veterinarias" [src]="chat.veterinarias.url">
+        <ion-item (click)="entrar_chat(chat,x)" style="--background:transparent; --color:#ffffff;" *ngFor="let chat of user.chats; let x=index;">
+            <ion-avatar>
+                <img *ngIf="chat.users[1].url" [src]="chat.users[1].url">
+                <img *ngIf="!chat.users[1].url" src="../../../assets/img/chat_user.PNG" alt="">
             </ion-avatar>
-            <ion-label *ngIf="chat.user_pets">
-                <h2> {{chat.user_pets.name}} {{chat.user_pets.apellido}} </h2>
-                <p> {{chat.user_pets.type}} </p>
+            <ion-label *ngIf="chat.users.length > 2">
+                <ion-label> {{chat.nombre}} </ion-label>
             </ion-label>
-            <ion-label *ngIf="chat.veterinarias">
-                <h2> {{chat.veterinarias.name}}</h2>
-                <p> {{chat.veterinarias.type}} </p>
-            </ion-label>
+            <ion-label *ngIf="chat.users.length == 2"> {{chat.users[1].name}} </ion-label>
         </ion-item>
     </ion-list>
-    <ion-list inset="true" style="background-color: blue;" *ngIf="!user.chats">
-        <ion-list-header>
+</ion-content>
+<ion-content *ngIf="!chats" class="background" padding>
+    <ion-list inset="true" style="background-color:transparent;">
+        <ion-list-header style="--color:#ffffff;">
             Usuarios disponibles
         </ion-list-header>
-        <ion-item (click)="entrar_chat(us)" style="--background:transparent;" *ngFor="let us of usuarios">
-            <ion-avatar slot="start">
-                <img *ngIf="us.url" [src]="us.url">
+        <ion-item *ngFor="let usuario of usuarios" (click)="crear_chat(usuario)" style="--background:transparent; --color:#ffffff;">
+            <ion-avatar>
+                <img *ngIf="usuario.url" [src]="usuario.url" [alt]="usuario.name">
+                <img *ngIf="!usuario.url" src="../../../assets/img/chat_user.PNG">
             </ion-avatar>
-            <ion-label *ngIf="us.apellido">
-                <h2> {{us.name}} {{us.apellido}} </h2>
-                <p> {{us.type}} </p>
+            <ion-label *ngIf="usuario.apellido">
+                <h2> {{usuario.name}} {{usuario.apellido}} </h2>
+                <p> {{usuario.type}} </p>
             </ion-label>
-            <ion-label *ngIf="!us.apellido">
-                <h2> {{us.name}}</h2>
-                <p> {{us.type}} </p>
+            <ion-label *ngIf="!usuario.apellido">
+                <h2> {{usuario.name}}</h2>
+                <p> {{usuario.type}} </p>
             </ion-label>
         </ion-item>
     </ion-list>
-
 </ion-content>

@@ -5,17 +5,30 @@
                 <ion-icon name="arrow-round-back"></ion-icon>
             </ion-button>
         </ion-buttons>
-        <ion-title> {{nombre}} </ion-title>
+        <ion-title> {{titulo}} </ion-title>
         <ion-buttons slot="end">
             <ion-button>
                 <ion-avatar>
-                    <img [src]="url" [alt]="nombre">
+                    <img *ngIf="url" [src]="url">
+                    <img *ngIf="!url" src="../../../../assets/img/chat_user.PNG">
                 </ion-avatar>
             </ion-button>
         </ion-buttons>
     </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
-
+<ion-content padding class="fondo">
+    <ion-item text-wrap lines="none" *ngFor="let talk of conversacion">
+        <ion-label> {{talk}} </ion-label>
+    </ion-item>
 </ion-content>
+<ion-footer>
+    <ion-item>
+        <ion-textarea id="message" type="text" #mensaje slot="start" placeholder="que piensas" autocorrect="on" clearOnEdit="true" clearInput="true">
+
+        </ion-textarea>
+        <ion-button (click)="publicar(mensaje.value)" slot="end" shape="round">
+            <ion-icon name="send"></ion-icon>
+        </ion-button>
+    </ion-item>
+</ion-footer>

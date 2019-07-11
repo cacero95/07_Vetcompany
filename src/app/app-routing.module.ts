@@ -15,8 +15,7 @@ const routes: Routes = [
   { path: 'veterinarias', loadChildren: './pages/home/veterinarias/veterinarias.module#VeterinariasPageModule' },
   
   { path: 'account', loadChildren: './pages/home/account/account.module#AccountPageModule' },
-  { path: 'update', loadChildren: './pages/home/account/update/update.module#UpdatePageModule' },  { path: 'chat', loadChildren: './pages/home/chat/chat.module#ChatPageModule' }
-
+  { path: 'update', loadChildren: './pages/home/account/update/update.module#UpdatePageModule' }
   
   
 ];

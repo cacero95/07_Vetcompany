@@ -3,7 +3,6 @@ export interface User_pets {
     apellido?:string;
     url:string;
     email:string;
-    password?:string;
     direccion?:string;
     telefono?:string;
     mascotas?:Mascotas[];
@@ -15,10 +14,32 @@ export interface User_pets {
 }
 export interface Chats {
     
+    nombre:string;
     mensaje?:string[];
-    user_pets?:User_pets;
-    veterinarias?:Veterinarias;
-    
+    users?:Users[];
+    url?:string;
+    type?:string;
+}
+export interface Mensaje {
+    contenido:string;
+    url:string;
+    creador:Users;
+}
+export interface Users {
+    name:string;
+    apellido?:string;
+    url?:string;
+    email:string;
+    direccion?:string;
+    telefono?:string;
+    mascotas?:Mascotas[];
+    nMascotas?:number;
+    tasks?:Eventos[];
+    type:string;
+    veterinarias?:Veterinarias[];
+    chats?:Chats[];
+    users?:User_pets[];
+    services?:string[];
 }
 export interface Mascotas {
     pet_name:string;
@@ -41,8 +62,8 @@ export interface Veterinarias {
     url?:string;
     type:string;
     services?:string[];
-    usuarios?:User_pets[];
-    eventos?:Eventos[];
+    users?:User_pets[];
+    tasks?:Eventos[];
     chats?:Chats[];
 }
 export interface Google_login{

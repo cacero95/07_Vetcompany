@@ -1,6 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { ModalController, NavParams } from '@ionic/angular';
-import { Chats } from '../../../models/usuarios/user_pets';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { ModalController, NavParams, Platform } from '@ionic/angular';
+import { Chats, Users } from '../../../models/usuarios/user_pets';
+import { DbaService } from '../../../services/data/dba.service';
+import { Storage } from '@ionic/storage';
+
 
 @Component({
   selector: 'app-chat',
@@ -8,32 +11,158 @@ import { Chats } from '../../../models/usuarios/user_pets';
   styleUrls: ['./chat.page.scss'],
 })
 export class ChatPage implements OnInit {
-  chat:Chats;
   url:string;
-  nombre:string;
-  mensajes:string[] = [];
-  constructor(private modal:ModalController,private params:NavParams) { }
+  chat:Chats;
+  titulo:string;
+  nombre_chat = '';
+  type:string;
+  user:Users;
+  integrantes:Users[] = [];
+  conversacion:string[] = [];
+  publicar_integrantes:Users[] = []; 
+  @ViewChild('message')send:ElementRef;
+  constructor(private modal:ModalController,private params:NavParams,
+    private dba:DbaService,private platform:Platform, private storage:Storage) { }
 
   ngOnInit() {
-    this.chat = this.params.get('nuevo_chat');
-    for (let x = this.chat.mensaje.length-1; x==0; x--){
-      this.mensajes.push(this.chat.mensaje[x]);
-    }
-    if (this.chat.user_pets){
-      this.url = this.chat.user_pets.url;
-      if (this.chat.user_pets.apellido){
-        this.nombre = `${this.chat.user_pets.name} ${this.chat.user_pets.apellido}`;
+    this.chat = this.params.get('chat');
+    this.user = this.params.get('user');
+    if(this.chat){
+      
+      this.nombre_chat = this.chat.nombre;
+      this.integrantes = this.chat.users;
+      this.conversacion = this.chat.mensaje;
+      
+      this.load_integrantes();
+      if(this.integrantes.length == 2 ){
+        // quiere decir conversacion 1-1
+        for (let integrante of this.integrantes){
+          if (this.user.email != integrante.email){
+            this.titulo = integrante.name;
+            if(integrante.url){
+              this.url = integrante.url;
+              this.type = integrante.type;
+            }
+          }
+        }
       }
       else {
-        this.nombre = this.chat.user_pets.name;
+        this.titulo = this.chat.nombre;
       }
     }
     else {
-      this.url = this.chat.veterinarias.url;
-      this.nombre = this.chat.veterinarias.name;
+      this.nombre_chat = this.params.get('nombre');
+      this.integrantes = this.params.get('usuarios_entrantes');
+      
+      if (this.integrantes.length == 2){
+        for (let integrante of this.integrantes){
+          if (integrante.email != this.user.email){
+            this.titulo = integrante.name;
+            if (integrante.url){
+              this.url = integrante.url;
+              this.type = integrante.type;
+            }
+          }
+        }
+      }
+      for (let x = 0; x < this.integrantes.length; x++){
+        if (!this.integrantes[x].chats){
+          // voy verificando que todos los integrantes del nuevo chat
+          // no tengan un chat undefined
+          this.integrantes[x].chats = [];
+          
+        }
+        
+        
+      }
+      this.crear_chat();
     }
-  }
+    
+  }  
   back(){
     this.modal.dismiss();
+  }
+  async load_integrantes(){
+    let personas:Users[] = [];
+    personas.push(this.user);
+    for (let x = 1; x < this.integrantes.length; x++){
+      let llave = this.integrantes[x].email;
+      llave = llave.replace("@","_");
+      while(llave.indexOf(".")!=-1){
+        llave = llave.replace(".","_");
+      }
+      let persona:any = await this.dba.load_integrante(llave);
+      if (persona.email){
+        personas.push(persona);
+      }
+      
+    }
+    this.integrantes = personas;
+  }
+  crear_chat(){
+    
+    let final:any[] = [];
+    for (let add of this.integrantes){
+      let nuevo = new Object();
+      for(let adjuntico in add){
+        
+        if(adjuntico != "chats" && adjuntico != "veterinarias" && adjuntico != "users" && adjuntico != "calificaciones" && adjuntico != "tasks"){
+          nuevo[adjuntico] = add[adjuntico];
+        }
+        
+      }
+      final.push(nuevo);
+    }
+    let nuevo_chat:Chats;
+    if (final.length == 2){
+      if (this.url){
+        nuevo_chat = {
+          nombre:this.nombre_chat,
+          users:final,
+          url:this.url,
+          type:this.type
+        }
+      }
+      else {
+        nuevo_chat = {
+          nombre:this.nombre_chat,
+          users:final,
+          type:this.type
+        }
+      }
+    }
+    else {
+      nuevo_chat = {
+        nombre:this.nombre_chat,
+        users:final,
+        type:'Grupo'
+      }
+    }
+    this.chat = nuevo_chat;
+  }
+  async publicar(mensaje){
+    
+    this.conversacion.unshift(mensaje);
+    
+    let send = document.getElementById('message');
+    send.innerHTML = "";
+    for (let integrante of this.integrantes){
+      let find = integrante.chats.findIndex((element)=>{
+        return element.nombre === this.nombre_chat
+      });
+      if (find > -1){
+        integrante.chats[find].mensaje = this.conversacion;
+      }
+      else {
+        // esto quiere decir que es un chat nuevo
+        this.chat["mensaje"] = this.conversacion;
+        // agrego el nuevo chat al arreglo de chats de cada usuario
+        integrante.chats.push(this.chat);
+
+        console.log(integrante);
+      }
+      await this.dba.publicar_chat(integrante,integrante.email);
+    }
+    
   }
 }

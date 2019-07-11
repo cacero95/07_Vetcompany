@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { User_pets, Veterinarias, Google_login } from 'src/app/models/usuarios/user_pets';
 import { Events } from '@ionic/angular';
+import { Users, Chats } from '../../models/usuarios/user_pets';
 
 @Injectable({
   providedIn: 'root'
@@ -63,6 +64,53 @@ export class DbaService {
         return data;
       })
     }))
+  }
+  publicar_chat(usuario:Users, key:string){
+    this.key = key;
+    this.key = this.key.replace("@","_");
+    while(this.key.indexOf(".") != -1){
+      this.key = this.key.replace(".","_");
+    }
+    console.log(usuario);
+    
+    this.fireDba.object(`usuarios/${this.key}/`).update(usuario);
+  }
+  load_integrante(integrante:string){
+    let usuario = new Object();
+    return new Promise((resolve,reject)=>{
+      this.fireDba.list(`usuarios/${integrante}`).snapshotChanges()
+      .pipe(map(values=>{
+        return values.map((value)=>{
+          let us = new Object()
+          let key = value.key
+          us[key] = value.payload.val()
+          usuario[key] = value.payload.val()
+          return us;
+        })
+      })).subscribe((data)=>{
+        resolve(usuario)
+      })
+    })
+  }
+  actualizar_chat(conversacion:string [], llave:string, nombre_chat:string){
+    let us:any = new Object;
+    this.key = llave;
+    this.key = this.key.replace("@","_");
+    while(this.key.indexOf(".") != -1){
+      this.key = this.key.replace(".","_");
+    }
+    this.fireDba.list(`usuarios/${this.key}`).snapshotChanges()
+    .pipe(map(values=>{
+      return values.map((value)=>{
+        let key = value.key;
+        us[key] = value.payload.val();
+        return us; 
+      })
+    }))
+  }
+  update_chat(llave,us){
+    console.log(us);
+    this.fireDba.object(`usuarios/${llave}`).update(us);
   }
   setToken(token){
     this.token = token;
