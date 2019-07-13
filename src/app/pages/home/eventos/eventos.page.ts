@@ -4,7 +4,7 @@ import { CalendarComponent } from 'ionic2-calendar/calendar';
 import { ModalController } from '@ionic/angular';
 import { EventsComponent } from './events/events.component';
 import { DbaService } from '../../../services/data/dba.service';
-import { Users } from '../../../models/usuarios/user_pets';
+import { Users, Eventos } from '../../../models/usuarios/user_pets';
 
 @Component({
   selector: 'app-eventos',
@@ -17,6 +17,12 @@ export class EventosPage implements OnInit {
     currentDate: new Date(),
     locale: 'es'
   };
+  event = {
+    title: '',
+    description: '',
+    startTime: '',
+    endTime: ''
+  };
   usuario:Users;
   origen_eventos:any[] = [];
   @ViewChild(CalendarComponent) myCal: CalendarComponent;
@@ -27,12 +33,33 @@ export class EventosPage implements OnInit {
 
   ngOnInit() {
     this.usuario = this.dba.getUsuario();
-    console.log(this.usuario);
-    if (this.usuario.tasks){
-      for(let tarea of this.usuario.tasks){
-
+    if (this.usuario){
+      if (this.usuario.tasks){
+        for(let tarea of this.usuario.tasks){
+          this.update_tasks(tarea);
+        }
       }
     }
+  }
+  update_tasks(task:Eventos){
+    let eventCopy:Eventos = {
+      title: task.title,
+      startTime:  new Date(task.startTime),
+      endTime: new Date(task.endTime),
+      description: task.description
+    }
+
+    this.origen_eventos.push(eventCopy);
+    this.myCal.loadEvents(); 
+    this.resetEvent();
+  }
+  resetEvent() {
+    this.event = {
+      title: '',
+      description: '',
+      startTime: new Date().toISOString(),
+      endTime: new Date().toISOString(),
+   };
   }
   navegar(url){
     this.router.navigate([`/${url}`]);
@@ -43,6 +70,19 @@ export class EventosPage implements OnInit {
     })
     modal.present();
     const {data} = await modal.onDidDismiss();
+    if (data){
+      let evento:Eventos = data.evento;
+      console.log(evento);
+      let copia_evento:Eventos = {
+        title: evento.title,
+        description: evento.description,
+        startTime: new Date(evento.startTime),
+        endTime: new Date(evento.endTime)
+      }
+      this.origen_eventos.push(copia_evento);
+      this.myCal.loadEvents();
+      this.resetEvent();
+    }
   }
   async onEventSelected(evento){
 

@@ -58,11 +58,15 @@ export class ChatPage implements OnInit {
       
       if (this.integrantes.length == 2){
         for (let integrante of this.integrantes){
+          
+          console.log(integrante);
           if (integrante.email != this.user.email){
             this.titulo = integrante.name;
+            this.type = integrante.type;
+            console.log(this.type);
             if (integrante.url){
               this.url = integrante.url;
-              this.type = integrante.type;
+              
             }
           }
         }

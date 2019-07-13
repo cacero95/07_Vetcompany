@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Eventos, Users } from '../../../../models/usuarios/user_pets';
-import { AlertController } from '@ionic/angular';
+import { AlertController, ModalController } from '@ionic/angular';
 import { DbaService } from '../../../../services/data/dba.service';
 
 @Component({
@@ -11,33 +11,55 @@ import { DbaService } from '../../../../services/data/dba.service';
 export class EventsComponent implements OnInit {
   
   constructor(private alert:AlertController,
-    private dba:DbaService) { }
+    private dba:DbaService,
+    private modal:ModalController) { }
 
   ngOnInit() {
     
   }
-
-  verificar_event(title:string,descripcion:string,inicio:Date,termina:Date){
+  back(){
+    this.modal.dismiss();
+  }
+  verificar_event(title:string,description:string,inicio:Date,termina:Date){
     let tick = true;
     let nuevo:Eventos = {
       title,
-      descripcion,
-      startime:inicio,
-      endtime:termina
+      description,
+      startTime:inicio,
+      endTime:termina
     }
     for(let element in nuevo){
-      if (!nuevo[element] && element != "endTime"){
+      if (!nuevo[element]){
         tick = false;
-        this.show_mensaje(element,'no puede estar vacio');
+        let titulo
+        switch(element){
+          case 'title':
+            titulo = 'título'
+            break;
+          case 'description':
+            titulo = 'descripción'
+            break;
+          case 'startTime':
+            titulo = 'inició'
+            break;
+          case 'endTime':
+            titulo = 'termina'
+            break;
+        }
+        this.show_mensaje(titulo,'no puede estar vacio');
       }
     }
-    if (!tick){
+    
+    if (tick){
       this.crear_event(nuevo);
     }
   }
   crear_event(nuevo:Eventos){
-    this.event = nuevo;
-    console.log(this.event);
+    this.modal.dismiss(
+      {
+        "evento":nuevo
+      }
+    ) 
   }
   async show_mensaje(titulo:string,mensaje:string){
     let alert = await this.alert.create({

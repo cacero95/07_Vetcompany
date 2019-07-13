@@ -49,9 +49,9 @@ export interface Mascotas {
 }
 export interface Eventos {
     title:string;
-    descripcion:string;
-    startime:Date;
-    endtime:Date;
+    description:string;
+    startTime:Date;
+    endTime?:Date;
 }
 
 export interface Veterinarias {
