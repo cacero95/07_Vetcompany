@@ -32,6 +32,9 @@ import { IonicStorageModule } from '@ionic/storage';
 import { PopperComponent } from './pages/home/popper/popper.component';
 import { ConsejosPage } from './pages/information/consejos/consejos.page';
 import { ChatPage } from './pages/home/chat/chat.page';
+import { UpdatePage } from './pages/home/account/update/update.page';
+import { LogInGuard } from './guards/log-in.guard';
+import { EventsComponent } from './pages/home/eventos/events/events.component';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyBVY89FFlPr00IH6TuWsszn0CgpFn0ZkA0",
@@ -44,8 +47,11 @@ export const firebaseConfig = {
 
 registerLocaleData(localeCO,'es',localeCOExtra);
 @NgModule({
-  declarations: [AppComponent,GruposPage,TypeUserPage,MascotasPage,PopperComponent,ConsejosPage,ChatPage],
-  entryComponents: [GruposPage,TypeUserPage,MascotasPage,PopperComponent,ConsejosPage,ChatPage],
+  declarations: [AppComponent,GruposPage,TypeUserPage,MascotasPage,PopperComponent,ConsejosPage,
+    ChatPage,UpdatePage,EventsComponent
+  ],
+  entryComponents: [GruposPage,TypeUserPage,MascotasPage,PopperComponent,ConsejosPage,
+    ChatPage,UpdatePage,EventsComponent],
   imports: [BrowserModule,
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFireDatabaseModule,
@@ -59,6 +65,7 @@ registerLocaleData(localeCO,'es',localeCOExtra);
     SplashScreen,
     InAppBrowser,
     Geolocation,
+    LogInGuard,
     ImagePicker,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],

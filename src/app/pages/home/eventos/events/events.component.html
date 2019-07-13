@@ -1,0 +1,29 @@
+<ion-content padding>
+    <br>
+    <br>
+    <br>
+    <ion-card>
+        <ion-card-header padding>
+            <ion-card-title> Agrega un Evento </ion-card-title>
+        </ion-card-header>
+        <ion-card-content padding>
+            <ion-item>
+                <ion-input #title type="text" placeholder="Titulo"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-input #descripcion type="text" placeholder="Descripcion"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label>Inició</ion-label>
+                <ion-datetime #inicio displayFormat="MM/DD/YYYY HH:mm" pickerFormat="MMM D:HH:mm"></ion-datetime>
+            </ion-item>
+            <ion-item>
+                <ion-label>Termina</ion-label>
+                <ion-datetime #termina displayFormat="MM/DD/YYYY HH:mm" pickerFormat="MMM D:HH:mm"></ion-datetime>
+            </ion-item>
+        </ion-card-content>
+    </ion-card>
+    <ion-button padding shape="round" expand="block" (click)="verificar_event(title.value, descripcion.value,inicio.value,termina.value)">
+        Crear
+    </ion-button>
+</ion-content>

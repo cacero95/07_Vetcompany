@@ -5,8 +5,8 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { User_pets, Veterinarias, Google_login } from 'src/app/models/usuarios/user_pets';
-import { Events } from '@ionic/angular';
-import { Users, Chats } from '../../models/usuarios/user_pets';
+import { Events, AlertController } from '@ionic/angular';
+import { Users } from '../../models/usuarios/user_pets';
 
 @Injectable({
   providedIn: 'root'
@@ -15,11 +15,12 @@ export class DbaService {
   key:string;
   actualiza:Observable<any[]>;
   google_user:Google_login;
-  usuario;
   token:string;
+  usuario;
   constructor(private fireDba:AngularFireDatabase,
     private events:Events,
-    private auth:AngularFireAuth) { }
+    private auth:AngularFireAuth,
+    private alert:AlertController) { }
 
   datos_mascotas(){
     return this.fireDba.list(`info_mascotas`).snapshotChanges()
@@ -114,6 +115,16 @@ export class DbaService {
   }
   setToken(token){
     this.token = token;
+  }
+  sign_out(){
+    this.auth.auth.signOut().then(async()=>{
+      let alert = await this.alert.create({
+        header:'Exito!',
+        subHeader:'Al cerrar sesión',
+        buttons:['confirmar']
+      })
+      alert.present();
+    })
   }
   login(email:string){
     let us = new Object();
@@ -242,11 +253,13 @@ export class DbaService {
   setUsuario(usuario){
     if(usuario){
       this.events.publish("login",usuario);
-      this.usuario = usuario
+      this.usuario = usuario;
     }
     else{
+      console.log('cerrando sesion');
       this.events.publish("close_sesion",null);
       this.usuario = null;
+      this.sign_out();
     }
   }
   getUsuario(){

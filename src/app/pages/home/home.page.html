@@ -33,13 +33,24 @@
         </ion-list-header>
         <ion-item (click)="entrar_chat(chat,x)" style="--background:transparent; --color:#ffffff;" *ngFor="let chat of user.chats; let x=index;">
             <ion-avatar>
-                <img *ngIf="chat.users[1].url" [src]="chat.users[1].url">
-                <img *ngIf="!chat.users[1].url" src="../../../assets/img/chat_user.PNG" alt="">
+                <img *ngIf="chat.users.length == 2 && chat.users[1].url && user.email != chat.users[1].email" [src]="chat.users[1].url">
+                <img *ngIf="chat.users.length == 2 && !chat.users[1].url && user.email != chat.users[1].email" src="../../../assets/img/chat_user.PNG">
+                <img *ngIf="chat.users.length == 2 && chat.users[0].url && user.email != chat.users[0].email" [src]="chat.users[0].url">
+                <img *ngIf="chat.users.length == 2 && !chat.users[0].url && user.email != chat.users[0].email" src="../../../assets/img/chat_user.PNG">
+                <img *ngIf="chat.users.length > 2" [src]="chat.url">
             </ion-avatar>
-            <ion-label *ngIf="chat.users.length > 2">
-                <ion-label> {{chat.nombre}} </ion-label>
+            <ion-label color="light" style="--padding-left: 10px;" *ngIf="chat.users.length > 2">
+                <h2> {{chat.nombre}} </h2>
+                <p> {{chat.type}} </p>
             </ion-label>
-            <ion-label *ngIf="chat.users.length == 2"> {{chat.users[1].name}} </ion-label>
+            <ion-label color="light" style="--padding-left: 10px;" *ngIf="chat.users.length == 2 && chat.users[0].email != user.email">
+                <h2> {{chat.users[0].name}} </h2>
+                <p> {{chat.users[0].type}} </p>
+            </ion-label>
+            <ion-label color="light" style="--padding-left: 10px;" *ngIf="chat.users.length == 2 && chat.users[1].email != user.email">
+                <h2> {{chat.users[1].name}} </h2>
+                <p> {{chat.users[1].type}} </p>
+            </ion-label>
         </ion-item>
     </ion-list>
 </ion-content>

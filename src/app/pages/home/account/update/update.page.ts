@@ -105,7 +105,7 @@ export class UpdatePage implements OnInit {
   }  
   back(){
     this.modal.dismiss({
-      'result':false
+      'salida':false
     });
   }
 

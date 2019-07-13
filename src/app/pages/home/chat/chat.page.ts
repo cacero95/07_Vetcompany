@@ -1,6 +1,6 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { ModalController, NavParams, Platform } from '@ionic/angular';
-import { Chats, Users } from '../../../models/usuarios/user_pets';
+import { Chats, Users, Mensaje } from '../../../models/usuarios/user_pets';
 import { DbaService } from '../../../services/data/dba.service';
 import { Storage } from '@ionic/storage';
 
@@ -17,8 +17,9 @@ export class ChatPage implements OnInit {
   nombre_chat = '';
   type:string;
   user:Users;
+  usuario:Users;
   integrantes:Users[] = [];
-  conversacion:string[] = [];
+  conversacion:Mensaje[] = [];
   publicar_integrantes:Users[] = []; 
   @ViewChild('message')send:ElementRef;
   constructor(private modal:ModalController,private params:NavParams,
@@ -27,6 +28,7 @@ export class ChatPage implements OnInit {
   ngOnInit() {
     this.chat = this.params.get('chat');
     this.user = this.params.get('user');
+    this.asignar_usuario();
     if(this.chat){
       
       this.nombre_chat = this.chat.nombre;
@@ -78,7 +80,31 @@ export class ChatPage implements OnInit {
       this.crear_chat();
     }
     
-  }  
+  } 
+  asignar_usuario(){
+    if(this.user.apellido){
+      this.usuario = {
+        name:this.user.name,
+        apellido:this.user.apellido,
+        email:this.user.email,
+        type:this.user.type
+      } 
+    }
+    else {
+      this.usuario = {
+        name:this.user.name,
+        email:this.user.email,
+        type:this.user.type
+      }
+    } 
+    if(this.user.url){
+      this.usuario['url'] = this.user.url;
+    }
+    else {
+      this.usuario['url'] = 'assets/img/chat_user.PNG';
+    }
+    console.log(this.usuario);
+  } 
   back(){
     this.modal.dismiss();
   }
@@ -141,8 +167,23 @@ export class ChatPage implements OnInit {
     this.chat = nuevo_chat;
   }
   async publicar(mensaje){
+    let message:Mensaje;
     
-    this.conversacion.unshift(mensaje);
+    if(this.url){
+      message = {
+        contenido:mensaje,
+        creador:this.usuario,
+        url:this.url
+      } 
+    }
+    else {
+      message = {
+        contenido:mensaje,
+        creador:this.usuario
+      }
+    }
+    console.log(message);
+    this.conversacion.unshift(message);
     
     let send = document.getElementById('message');
     send.innerHTML = "";

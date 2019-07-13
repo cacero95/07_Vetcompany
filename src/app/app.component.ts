@@ -16,9 +16,9 @@ export class AppComponent {
 
   select_menu = 0;
   menuVet = [
+    {title:'Principal', url:'/home', icon:'home'},
     {title:'Calendario', url:'/eventos', icon:'calendar'},
     {title:'Mensajes', url:'/notificaciones',icon:'chatbubbles'},
-    {title:'Principal', url:'/home', icon:'home'},
     {title:'Enterate', url:'',icon:'quote'},
     {title:'Cuenta', url:'account', icon:'contact'}
   ]

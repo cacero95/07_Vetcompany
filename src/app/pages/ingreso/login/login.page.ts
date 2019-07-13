@@ -19,7 +19,12 @@ export class LoginPage implements OnInit {
     private router:Router) { }
   
   ngOnInit() {
-    
+    this.auth.authState.subscribe((usuario)=>{
+      if (usuario){
+        this.dba.login(usuario.email);
+        this.router.navigate(['home']);
+      }
+    })
   }
   login(email,password){
     

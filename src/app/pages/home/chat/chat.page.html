@@ -18,9 +18,17 @@
 </ion-header>
 
 <ion-content padding class="fondo">
-    <ion-item text-wrap lines="none" *ngFor="let talk of conversacion">
-        <ion-label> {{talk}} </ion-label>
-    </ion-item>
+    <ion-item-divider style="--background: transparent; --padding-bottom:20px;" text-wrap *ngFor="let talk of conversacion">
+        <ion-avatar slot="start">
+            <img *ngIf="talk.url" [src]="talk.url">
+            <img *ngIf="!talk.url" src="../../../../assets/img/chat_user.PNG">
+        </ion-avatar>
+        <ion-label color="light" style="--padding-left: 10px;">
+            <h2> {{talk.contenido}} </h2>
+            <p *ngIf="talk.creador.apellido"> {{talk.creador.name}} {{talk.creador.apellido}} </p>
+            <p *ngIf="!talk.creador.apellido"> {{talk.creador.name}} </p>
+        </ion-label>
+    </ion-item-divider>
 </ion-content>
 <ion-footer>
     <ion-item>

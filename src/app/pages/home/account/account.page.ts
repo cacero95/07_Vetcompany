@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { DbaService } from '../../../services/data/dba.service';
 import { Veterinarias,User_pets } from 'src/app/models/usuarios/user_pets';
-import { Events } from '@ionic/angular';
+import { Events, AlertController, ModalController } from '@ionic/angular';
 import { Router } from '@angular/router';
+import { UpdatePage } from './update/update.page';
 
 @Component({
   selector: 'app-account',
@@ -14,7 +15,9 @@ export class AccountPage implements OnInit {
   vet:Veterinarias;
   constructor(private dba:DbaService,
     private eventos:Events,
-    private router:Router) { }
+    private router:Router,
+    private alert:AlertController,
+    private modal:ModalController) { }
 
   ngOnInit() {
     let usuario = this.dba.getUsuario();
@@ -31,5 +34,22 @@ export class AccountPage implements OnInit {
   }
   back(){
     this.router.navigate(['/home']);
+  }
+  async update_profile(user){
+    let modal = await this.modal.create({
+      component:UpdatePage,
+      componentProps:{
+        user
+      }
+    });
+    modal.present();
+    const { data } = await modal.onDidDismiss();
+    if (!data.salida){
+      
+    }
+  }
+  close_session(){
+    this.dba.setUsuario(null);
+    this.router.navigate(['']);
   }
 }

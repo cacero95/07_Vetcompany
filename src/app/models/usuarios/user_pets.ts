@@ -15,14 +15,14 @@ export interface User_pets {
 export interface Chats {
     
     nombre:string;
-    mensaje?:string[];
+    mensaje?:Mensaje[];
     users?:Users[];
     url?:string;
     type?:string;
 }
 export interface Mensaje {
     contenido:string;
-    url:string;
+    url?:string;
     creador:Users;
 }
 export interface Users {
